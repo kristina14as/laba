@@ -51,7 +51,7 @@ void Zero(void)
 	 while(1) 
 	{   
 		delay(1);
-		putchar('0');
+		//putchar('0');
 		toggle_led(BLUE);
 	} 
 	
@@ -66,7 +66,7 @@ void One(void)
  while(1) 
 		{   
 		delay(1); 
-		putchar('1');			
+		//putchar('1');			
 		toggle_led(RED);
 	}  
 	
@@ -82,7 +82,7 @@ void Two(void)
 	while(1) 
 	{   
 		delay(1);
-		putchar('2');
+		//putchar('2');
 		toggle_led(GREEN);
 	} 
 	
