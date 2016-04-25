@@ -50,9 +50,9 @@ void Zero(void)
 	
 	 while(1) 
 	{   
-		SysTick_Wait10ms(1);
+		delay(1);
 		putchar('0');
-		GPIO_PORTF_DATA_R ^= LED_blue;
+		toggle_led(BLUE);
 	} 
 	
 	}
@@ -65,9 +65,9 @@ void One(void)
 	
  while(1) 
 		{   
-		SysTick_Wait10ms(1);  
+		delay(1); 
 		putchar('1');			
-		GPIO_PORTF_DATA_R ^= LED_red;
+		toggle_led(RED);
 	}  
 	
 	} // end the 
@@ -81,13 +81,33 @@ void Two(void)
 	
 	while(1) 
 	{   
-		SysTick_Wait10ms(1);
+		delay(1);
 		putchar('2');
-		GPIO_PORTF_DATA_R ^= LED_green;
+		toggle_led(GREEN);
 	} 
 	
 }
 	
+void toggle_led(led_color_type lightColor) {
+	switch (lightColor) {
+			case RED:
+					GPIO_PORTF_DATA_R &= ~LED_green; 
+					GPIO_PORTF_DATA_R &= ~LED_blue; 
+					GPIO_PORTF_DATA_R ^= LED_red;
+				break;
+			case BLUE:
+				GPIO_PORTF_DATA_R &= ~LED_green; 
+					GPIO_PORTF_DATA_R &= ~LED_red; 
+					GPIO_PORTF_DATA_R ^= LED_blue;
+				break;
+			case GREEN:
+					GPIO_PORTF_DATA_R &= ~LED_red; 
+					GPIO_PORTF_DATA_R &= ~LED_blue; 
+					GPIO_PORTF_DATA_R ^= LED_green;
+			default:
+				break;
+		}
+}
 
 // main
 int main(void) {
@@ -101,22 +121,6 @@ int main(void) {
 	
 ////PortF_Init();
 //	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
-void toggle_led(led_color_type lightColor){
-		switch (lightColor) {
-			case RED:
-					GPIO_PORTF_DATA_R ^= LED_red;
-				break;
-			case BLUE:
-					GPIO_PORTF_DATA_R ^= LED_blue;
-				break;
-			case GREEN:
-					GPIO_PORTF_DATA_R ^= LED_green;
-			default:
-				break;
-		}
-}
-	
-	
 //	GPIO_PORTF_DIR_R |= 0x0E;             // make PF2 out (built-in LED)
 //  GPIO_PORTF_AFSEL_R &= ~0x04;          // disable alt funct on PF2
 //  GPIO_PORTF_DEN_R |= 0x1F;             // enable digital I/O on PF2
