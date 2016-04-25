@@ -31,13 +31,10 @@ void One(void);
 void Two(void);
 void Zero(void);
 void software_delay_halfsecond(void);
-<<<<<<< HEAD
 int32_t TIME_GetTime(void);
 void TIME_PrintEpochTime(int32_t epoch_time);
 int32_t TIME_EncodeEpoch( uint32_t year, uint32_t month, uint32_t day, uint32_t hour, uint32_t minute, uint32_t second);
-=======
 void toggle_led(led_color_type lightColor);
->>>>>>> origin/master
 
 // Function Prototypes
 void shell(void);
