@@ -1,42 +1,0 @@
-Dependencies for Project 'ee383OS', Target 'Target 1': (DO NOT MODIFY !)
-F (.\UART.c)(0x571A5FA4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\uart.o --omf_browse .\objects\uart.crf --depend .\objects\uart.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (UART.h)(0x571A5FA4)
-I (tm4c123gh6pm.h)(0x571A5FA4)
-F (.\startup.s)(0x571A5FA4)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 517" --pd "TM4C123GH6PM SETA 1"--list .\listings\startup.lst --xref -o .\objects\startup.o --depend .\objects\startup.d)
-F (.\PLL.c)(0x571A5FA4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\pll.o --omf_browse .\objects\pll.crf --depend .\objects\pll.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (PLL.h)(0x571A5FA4)
-F (.\serialio.c)(0x571A5FA4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\serialio.o --omf_browse .\objects\serialio.crf --depend .\objects\serialio.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DBE246)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (UART.h)(0x571A5FA4)
-F (.\shell.c)(0x571A5FA4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\shell.o --omf_browse .\objects\shell.crf --depend .\objects\shell.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DBE246)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-F (.\383os.c)(0x571D6224)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\383os.o --omf_browse .\objects\383os.crf --depend .\objects\383os.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x55DBE248)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (383os.h)(0x571A5FA3)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DBE246)
-F (.\383osASM.s)(0x571A5FA3)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1"-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 517" --pd "TM4C123GH6PM SETA 1"--list .\listings\383osasm.lst --xref -o .\objects\383osasm.o --depend .\objects\383osasm.d)
-F (.\EdgeInterrupt.c)(0x571D5D04)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\edgeinterrupt.o --omf_browse .\objects\edgeinterrupt.crf --depend .\objects\edgeinterrupt.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (tm4c123gh6pm.h)(0x571A5FA4)
-F (.\ostestmain.c)(0x571D5D4D)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\ostestmain.o --omf_browse .\objects\ostestmain.crf --depend .\objects\ostestmain.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DBE246)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (UART.h)(0x571A5FA4)
-I (SysTick.h)(0x571A7056)
-I (PLL.h)(0x571A5FA4)
-I (383os.h)(0x571A5FA3)
-I (tm4c123gh6pm.h)(0x571A5FA4)
-I (EdgeInterrupt.c)(0x571D5D04)
-F (.\Systick.c)(0x571D5BE3)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections-I "C:\Users\Kristina\Documents\UK\ee 383\lab A\EE383S16OS\EE383S16OS\RTE"-I C:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="517" -DTM4C123GH6PM-o .\objects\systick.o --omf_browse .\objects\systick.crf --depend .\objects\systick.d)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DBE250)
-I (tm4c123gh6pm.h)(0x571A5FA4)
-F (.\UART.h)(0x571A5FA4)()
-F (.\tm4c123gh6pm.h)(0x571A5FA4)()
-F (.\PLL.h)(0x571A5FA4)()
-F (.\383os.h)(0x571A5FA3)()
-F (.\Systick.h)(0x571A7056)()
