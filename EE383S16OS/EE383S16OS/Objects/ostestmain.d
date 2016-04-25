@@ -1,9 +1,0 @@
-.\objects\ostestmain.o: ostestmain.c
-.\objects\ostestmain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\ostestmain.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-.\objects\ostestmain.o: UART.h
-.\objects\ostestmain.o: SysTick.h
-.\objects\ostestmain.o: PLL.h
-.\objects\ostestmain.o: 383os.h
-.\objects\ostestmain.o: tm4c123gh6pm.h
-.\objects\ostestmain.o: EdgeInterrupt.c
