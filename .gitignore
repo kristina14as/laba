@@ -46,3 +46,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.o
+*.lst
+*.axf
+*.d
+*.htm
+*.dep
+*.map

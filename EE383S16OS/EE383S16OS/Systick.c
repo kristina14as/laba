@@ -58,7 +58,7 @@ extern uint32_t EPOCH_SECONDS;
 //}
 
 volatile uint32_t Counts;
-void SysTick_Init(){
+void SysTick_Init(void){
 	SYSCTL_RCGCGPIO_R |= 0x08;		//activate port D
 	Counts = 0;
 	GPIO_PORTD_AMSEL_R &= ~0x01;		//no analog

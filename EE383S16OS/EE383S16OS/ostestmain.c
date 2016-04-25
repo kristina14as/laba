@@ -10,7 +10,7 @@
 #include "PLL.h"
 #include "383os.h"
 #include "tm4c123gh6pm.h"
-#include "EdgeInterrupt.c" 
+//#include "EdgeInterrupt.c" 
 
 #define PF2             (*((volatile uint32_t *)0x40025010))
 
