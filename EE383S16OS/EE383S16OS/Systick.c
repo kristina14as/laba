@@ -83,7 +83,9 @@ void SysTick_Handler()
 	if(count >=10)
 	{
 		count = 0;
-		EPOCH_SECONDS++;
+		//here we need to switch tasks
+		context_sw();
+		//EPOCH_SECONDS++;
 	}
 	
 	PF2 ^= 0x04; // optional debug (toggle Blue LED)
