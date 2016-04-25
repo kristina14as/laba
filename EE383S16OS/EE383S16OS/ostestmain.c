@@ -10,11 +10,16 @@
 #include "PLL.h"
 #include "383os.h"
 #include "tm4c123gh6pm.h"
+#include <stdbool.h>
 //#include "EdgeInterrupt.c" 
 
 #define PF2             (*((volatile uint32_t *)0x40025010))
+#define LED_red    0x02 //  R--    0x02
+#define LED_blue   0x04 //  --B    0x04
+#define LED_green  0x08 //  -G-    0x08
 
 //  Global Declarations section
+typedef enum {GREEN, RED, BLUE} led_color_type;
 unsigned long EPOCH_SECONDS;
 
 unsigned char task_zero_stack[MIN_STACK_SIZE]; // Declare a seperate stack 
@@ -26,9 +31,13 @@ void One(void);
 void Two(void);
 void Zero(void);
 void software_delay_halfsecond(void);
+<<<<<<< HEAD
 int32_t TIME_GetTime(void);
 void TIME_PrintEpochTime(int32_t epoch_time);
 int32_t TIME_EncodeEpoch( uint32_t year, uint32_t month, uint32_t day, uint32_t hour, uint32_t minute, uint32_t second);
+=======
+void toggle_led(led_color_type lightColor);
+>>>>>>> origin/master
 
 // Function Prototypes
 void shell(void);
@@ -43,7 +52,8 @@ void Zero(void)
 	 while(1) 
 	{   
 		software_delay_halfsecond();               
-		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+		//PF2 ^= 0x04;     // toggle PF2 (Blue LED)
+		toggle_led(BLUE);
 	} 
 	
 	}
@@ -57,7 +67,8 @@ void One(void)
  while(1) 
 	{   
 		software_delay_halfsecond();               
-		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+		//PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+		toggle_led(RED);
 	}  
 	
 	} // end the 
@@ -72,10 +83,26 @@ void Two(void)
 	 while(1) 
 	{   
 		software_delay_halfsecond();               
-		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+		//PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+		toggle_led(GREEN);
 	} 
 	
-} 
+}
+	
+void toggle_led(led_color_type lightColor){
+		switch (lightColor) {
+			case RED:
+					GPIO_PORTF_DATA_R ^= LED_red;
+				break;
+			case BLUE:
+					GPIO_PORTF_DATA_R ^= LED_blue;
+				break;
+			case GREEN:
+					GPIO_PORTF_DATA_R ^= LED_green;
+			default:
+				break;
+		}
+}
 	
 	
 
