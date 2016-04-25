@@ -27,6 +27,7 @@ unsigned char task_one_stack[MIN_STACK_SIZE];  // for each task
 unsigned char task_two_stack[MIN_STACK_SIZE];
 unsigned char task_shell_stack[1024];
 
+void PortF_Init(void);
 void One(void);
 void Two(void);
 void Zero(void);
@@ -49,9 +50,9 @@ void Zero(void)
 	
 	 while(1) 
 	{   
-		delay(1);              
-		//PF2 ^= 0x04;     // toggle PF2 (Blue LED)
-		toggle_led(BLUE);
+		SysTick_Wait10ms(1);
+		putchar('0');
+		GPIO_PORTF_DATA_R ^= LED_blue;
 	} 
 	
 	}
@@ -63,10 +64,10 @@ void One(void)
 	//	putchar('1');
 	
  while(1) 
-	{   
-		delay(1);              
-		//PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
-		toggle_led(RED);
+		{   
+		SysTick_Wait10ms(1);  
+		putchar('1');			
+		GPIO_PORTF_DATA_R ^= LED_red;
 	}  
 	
 	} // end the 
@@ -78,16 +79,28 @@ void Two(void)
 	//	putchar('2');
   //tasks should not end
 	
-	 while(1) 
+	while(1) 
 	{   
-		delay(1);
-		//software_delay_halfsecond();               
-		//PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
-		toggle_led(GREEN);
+		SysTick_Wait10ms(1);
+		putchar('2');
+		GPIO_PORTF_DATA_R ^= LED_green;
 	} 
 	
 }
 	
+
+// main
+int main(void) {
+	PortF_Init();
+	PLL_Init();     // 50 MHz (SYSDIV2 == 7, defined in pll.h)
+  UART_Init();    // initialize UART
+	                //115,200 baud rate (assuming 50 MHz UART clock),
+                  // 8 bit word length, no parity bits, one stop bit, FIFOs enabled
+	SysTick_Init();
+	
+	
+////PortF_Init();
+//	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
 void toggle_led(led_color_type lightColor){
 		switch (lightColor) {
 			case RED:
@@ -104,26 +117,13 @@ void toggle_led(led_color_type lightColor){
 }
 	
 	
-
-// main
-int main(void) {
-	
-	PLL_Init();     // 50 MHz (SYSDIV2 == 7, defined in pll.h)
-  UART_Init();    // initialize UART
-	                //115,200 baud rate (assuming 50 MHz UART clock),
-                  // 8 bit word length, no parity bits, one stop bit, FIFOs enabled
-	SysTick_Init();
-	
-	
-//PortF_Init();
-	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
-	GPIO_PORTF_DIR_R |= 0x04;             // make PF2 out (built-in LED)
-  GPIO_PORTF_AFSEL_R &= ~0x04;          // disable alt funct on PF2
-  GPIO_PORTF_DEN_R |= 0x04;             // enable digital I/O on PF2
-                                        // configure PF2 as GPIO
-  GPIO_PORTF_PCTL_R = (GPIO_PORTF_PCTL_R&0xFFFFF0FF)+0x00000000;
-  GPIO_PORTF_AMSEL_R = 0;               // disable analog functionality on PF
-  //GPIO_PORTF2 = 0;                      // turn off LED
+//	GPIO_PORTF_DIR_R |= 0x0E;             // make PF2 out (built-in LED)
+//  GPIO_PORTF_AFSEL_R &= ~0x04;          // disable alt funct on PF2
+//  GPIO_PORTF_DEN_R |= 0x1F;             // enable digital I/O on PF2
+//                                        // configure PF2 as GPIO
+//  GPIO_PORTF_PCTL_R = (GPIO_PORTF_PCTL_R&0xFFFFF0FF)+0x00000000;
+//  GPIO_PORTF_AMSEL_R = 0;               // disable analog functionality on PF
+//  //GPIO_PORTF2 = 0;                      // turn off LED
 	
   puts("\n\nWelcome to the EE383 Operating System...\n\n");
 
@@ -142,9 +142,23 @@ int main(void) {
 		;
 } //main
 
+void PortF_Init(void){ 
+	volatile unsigned long delay;
+  SYSCTL_RCGC2_R |= 0x00000020;     // 1) F clock
+  delay = SYSCTL_RCGC2_R;           // delay   
+  GPIO_PORTF_LOCK_R = 0x4C4F434B;   // 2) unlock PortF PF0  
+  GPIO_PORTF_CR_R = 0x1F;           // allow changes to PF4-0       
+  GPIO_PORTF_AMSEL_R = 0x00;        // 3) disable analog function
+  GPIO_PORTF_PCTL_R = 0x00000000;   // 4) GPIO clear bit PCTL  
+  GPIO_PORTF_DIR_R = 0x0E;          // 5) PF4,PF0 input, PF3,PF2,PF1 output   
+  GPIO_PORTF_AFSEL_R = 0x00;        // 6) no alternate function
+  GPIO_PORTF_PUR_R = 0x11;          // enable pullup resistors on PF4,PF0       
+  GPIO_PORTF_DEN_R = 0x1F;          // 7) enable digital pins PF4-PF0        
+}
+
 int32_t TIME_GetTime()
 {
-	int32_t new_time;
+//	int32_t new_time;
 	char input[14];
 	int year, month, day, hour, minute, second;
 	int ok_date = 0;   // flag that gets set to true once an acceptable date is input by the user
@@ -187,7 +201,7 @@ void TIME_PrintEpochTime(int32_t epoch_time)  // IS THIS SUPPOSED TO BE PRINT EP
 {
 	uint32_t year, month, day, hour, minute, second;
 	uint32_t leap_days;
-	int num_months[12];
+	//int num_months[12];
 	epoch_time = epoch_time + 86400; /////////ADD A DAY
 	printf("\nThe total time in EPOCH seconds is: %u", epoch_time);
 	

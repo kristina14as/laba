@@ -89,7 +89,7 @@ void SysTick_Handler()
 		//EPOCH_SECONDS++;
 	}
 	
-	PF2 ^= 0x04; // optional debug (toggle Blue LED)
+	//PF2 ^= 0x04; // optional debug (toggle Blue LED)
 }
 
 

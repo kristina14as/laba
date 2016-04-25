@@ -116,6 +116,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -144,34 +148,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>131</LineNumber>
+          <LineNumber>88</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1474</Address>
+          <Address>1576</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\383os.c</Filename>
+          <Filename>\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\Systick.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\L6\383os.c\131</Expression>
+          <Expression>\\L6\/Mac/Home/Desktop/laba/EE383S16OS/EE383S16OS/Systick.c\88</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>126</LineNumber>
+          <LineNumber>45</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>724</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\383os.c</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\383osASM.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\L6\/Mac/Home/Desktop/laba/EE383S16OS/EE383S16OS/383osASM.s\45</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>120</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>3080</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\\Mac\Home\Desktop\laba\EE383S16OS\EE383S16OS\ostestmain.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\L6\/Mac/Home/Desktop/laba/EE383S16OS/EE383S16OS/ostestmain.c\120</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -310,7 +330,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>8</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\EdgeInterrupt.c</PathWithFileName>
@@ -322,7 +342,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>9</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\ostestmain.c</PathWithFileName>
