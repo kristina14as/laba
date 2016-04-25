@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
-
+#include "383os.h"
 
 void prmsg(char *);
 int strcmp(const char *s1, const char *s2);
@@ -96,6 +96,10 @@ void  execute(char **argv)
 
 }
 
+void ps() {
+		printf("%-10s%-5s%-10s%-10s%-10s%-5s%-15s\n", "USER", "TID", "%CPU", "STK_SZ", "%STK", "STATE", "ADDR");
+}
+
 // -----------------------------------------------------------------
 // implementation of 383 shell
 // -----------------------------------------------------------------
@@ -122,11 +126,13 @@ void  shell(void)
 		      settime(argv[1]);   //settime(argv[1]);
           else if (strcmp(argv[0], "temp") == 0)
 		      temp();   //temp(argv[1]);
+					else if (strcmp(argv[0], "ps") == 0)
+					ps();
 					else if (strcmp(argv[0], "i") == 0)
 		      puts("an i\n");   //
 					else if (*argv[0] != 0 && argv[0] != 0) 
 		      execute(argv);    /* if not empy line execute command as new process*/
-					else	
+					else
 					putchar('\n');
      }//while(1)
 }

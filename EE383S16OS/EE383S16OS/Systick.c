@@ -76,21 +76,21 @@ void SysTick_Init(void){
 
 // SYSTICK HANDLER FROM LAB 8
 // ISR code that would run every time the SysTick timer counts down to 0
-void SysTick_Handler()
-{
-	static uint32_t count = 0; //static will mean non-volatile
-	count = count + 1;
-	if(count >=10)
-	{
-		count = 0;
-		//here we need to switch tasks
-		// PArt 1
-		GPIOPortF_Handler();
-		//EPOCH_SECONDS++;
-	}
-	
-	//PF2 ^= 0x04; // optional debug (toggle Blue LED)
-}
+//void SysTick_Handler()
+//{
+//	static uint32_t count = 0; //static will mean non-volatile
+//	count = count + 1;
+//	if(count >=2)
+//	{
+//		count = 0;
+//		//here we need to switch tasks
+//		// PArt 1
+//		GPIOPortF_Handler();
+//		//EPOCH_SECONDS++;
+//	}
+//	
+//	//PF2 ^= 0x04; // optional debug (toggle Blue LED)
+//}
 
 
 // Time delay using busy wait.

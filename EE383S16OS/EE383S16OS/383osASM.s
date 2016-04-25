@@ -24,10 +24,22 @@ INT_COUNT SPACE 4
 	AREA |.text|, CODE, READONLY, ALIGN=2
 		
 	EXPORT GPIOPortF_Handler
+	EXPORT SysTick_Handler
 	EXPORT StartNewTask
 		
 GPIOPortF_Handler
 	 ; This isr will context switch every SWITCH_COUNT ticks
+	 ldr r0, =GPIO_PORTF_ICR_R
+	 mov r1, #0x10
+	 str r1,[r0]    ; acknowledge flag4
+	 ldr r0,=INT_COUNT
+	 ldr r1,[r0]
+	 subs r1,r1,#1
+	 blo context_sw ; perform context switch
+	 str r1,[r0]
+	 bx lr		    ; return from ISR
+SysTick_Handler
+	; This isr will context switch every SWITCH_COUNT ticks
 	 ldr r0, =GPIO_PORTF_ICR_R
 	 mov r1, #0x10
 	 str r1,[r0]    ; acknowledge flag4
