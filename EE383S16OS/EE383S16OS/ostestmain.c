@@ -26,6 +26,9 @@ void One(void);
 void Two(void);
 void Zero(void);
 void software_delay_halfsecond(void);
+int32_t TIME_GetTime(void);
+void TIME_PrintEpochTime(int32_t epoch_time);
+int32_t TIME_EncodeEpoch( uint32_t year, uint32_t month, uint32_t day, uint32_t hour, uint32_t minute, uint32_t second);
 
 // Function Prototypes
 void shell(void);
@@ -113,7 +116,187 @@ int main(void) {
 		;
 } //main
 
+int32_t TIME_GetTime()
+{
+	int32_t new_time;
+	char input[14];
+	int year, month, day, hour, minute, second;
+	int ok_date = 0;   // flag that gets set to true once an acceptable date is input by the user
+	
+	//loop until the user enters an acceptable date
+	while(ok_date == 0)
+	{
+		printf("\nThis loop will go until you enter a valid year/month/day/hour/min/sec");
+		printf("\nPlease enter time as YYYYMMDDHHMISS: ");
+		UART_InString(input, 14);
+		//gets(input);   //get the input from the user and store in an array of character
+		
+		sscanf(input, "%4d%2d%2d%2d%2d%2d\n", &year, &month, &day, &hour, &minute, &second);         ///%d%d%d%d%d%d", &)
+		
+		if((month > 12) || (month == 0) || (day>31) || (day == 0) || (hour >23) || (hour<=0) || (minute>59) || (minute<0) || (second>59) || (second < 0))
+		{
+			ok_date = 0;
+			printf("\nThe number that you entered was NOT a valid year/month/day/hour/min/sec");
+		}
+		else
+			ok_date = 1;
+	
+	}// end of loop that checks for an acceptable date
+	
+	
+	// prints the six integers
+	//printf("\n%4u %2u %2u %2u %2u %2u\n",year,month,day,hour,minute,second);
+	printf("\nyear = %d, month = %d, day = %d, hours = %d, minutes = %d, seconds = %d\n",year,month,day,hour,minute,second);
+	
+	
+	///////////this is where you convert the input time 
+	
+	return TIME_EncodeEpoch(year, month, day, hour, minute, second);
+}// end of GetTime
 
+
+// converts the given Epoch seconds into the 6 integers: year, month, day, hour, minute, second
+//// assume valid epoch time is passed in
+void TIME_PrintEpochTime(int32_t epoch_time)  // IS THIS SUPPOSED TO BE PRINT EPOCH TIME?
+{
+	uint32_t year, month, day, hour, minute, second;
+	uint32_t leap_days;
+	int num_months[12];
+	epoch_time = epoch_time + 86400; /////////ADD A DAY
+	printf("\nThe total time in EPOCH seconds is: %u", epoch_time);
+	
+		// year = (total time / # secs in year) + 1970
+	year = (epoch_time/31536000) + 1970;				
+	//Determine number of leap days
+	leap_days = (year - 1972)/4 + 1;
+	//Determine if date is in a leap year, and if has occurred
+	if ((year%4 == 0) && (month <= 2))
+	{		//minus 1 because this year's leap day hasn't happened yet
+				leap_days--;			
+	}
+	// Subtract all leap days in seconds
+	epoch_time -= (leap_days*86400);			
+	// now get the real number of years and take out of epoch
+	year = ((epoch_time/31536000) + 1970);
+	epoch_time -= (31536000*(year - 1970));
+	
+	// check the month
+	if((epoch_time/28857600)==1)
+	{month = 12;}
+	else if((epoch_time/26265600)==1)
+	{		month = 11;}
+	else if((epoch_time/23587200)==1)
+	{		month = 9;}
+	else if((epoch_time/20995200)==1)
+	{		month = 8;}
+	else if((epoch_time/18316800)==1)
+	{		month = 7;}
+	else if((epoch_time/13046400)==1)
+	{		month = 6;}
+	else if((epoch_time/10368000)==1)
+	{		month = 5;}
+	else if((epoch_time/7776000)==1)
+	{		month = 4;}
+	else if((epoch_time/5097600)==1)
+	{		month = 3;}
+	else if((epoch_time/2678400)==1)
+	{		month = 2;}
+	else
+		month = 1;
+	
+	switch (month){
+case 1: epoch_time -= 0;break;
+case 2: epoch_time -= 2678400;break;
+case 3: epoch_time -= 5097600;break;
+case 4: epoch_time -= 7776000;break;
+case 5: epoch_time -= 10368000;break;
+case 6: epoch_time -= 13046400;break;
+case 7: epoch_time -= 15638400;break;
+case 8: epoch_time -= 18316800;break;
+case 9: epoch_time -= 20995200;break;
+case 10: epoch_time -= 23587200;break;
+case 11: epoch_time -= 26265600;break;
+case 12: epoch_time -= 28857600;break;
+}
+//Add in fully completed days
+//epoch_seconds += (day - 1)*86400
+day = ((epoch_time/86400)+1);
+epoch_time -= ((day - 1)*86400);
+
+//Add in fully completed hours
+//No -1 because hour starts at 0
+//epoch_seconds += hour*3600
+hour = (epoch_time/3600);
+epoch_time -= (hour*3600);
+
+//Add in fully completed minutes
+//epoch_seconds := minute*60
+//epoch_seconds += second;
+minute = (epoch_time/60);
+epoch_time -= (minute*60);
+
+second = epoch_time;
+//epoch_time -= second;
+
+//printf("\n Your date in regular notation is: %4u%2u%2u%2u%2u%2u", year, month, day, hour, minute, second);
+printf("\nYour Regular Date from the EPOCH time is: year: %4u month: %2u day: %2u hour: %2u minute: %2u second: %2u\n", year, month, day, hour, minute, second);
+	
+}// end of PrintTime
+
+
+// for part 5 - converts the given date into UNIX Epoch seconds
+int32_t TIME_EncodeEpoch( uint32_t year,
+uint32_t month,
+uint32_t day,
+uint32_t hour,
+uint32_t minute,
+uint32_t second)
+{
+	int32_t epoch_seconds;
+	int32_t leap_days;
+	//Pseudo Code for TIME_EncodeEpoch()
+	epoch_seconds = 31536000*(year - 1970); // seconds per year
+	//Determine number of leap days
+	leap_days = (year - 1972)/4 + 1;
+	//Determine if date is in a leap year, and if has occurred
+	if (year%4 == 0)
+	{
+		if (month <= 2)
+		leap_days--;
+			//minus 1 because this year's leap day hasn't happened yet
+	}
+	epoch_seconds += leap_days*86400;
+	
+	//Fully completed months
+switch (month){
+case 1: epoch_seconds += 0;break;
+case 2: epoch_seconds += 2678400;break;
+case 3: epoch_seconds += 5097600;break;
+case 4: epoch_seconds += 7776000;break;
+case 5: epoch_seconds += 10368000;break;
+case 6: epoch_seconds += 13046400;break;
+case 7: epoch_seconds += 15638400;break;
+case 8: epoch_seconds += 18316800;break;
+case 9: epoch_seconds += 20995200;break;
+case 10: epoch_seconds += 23587200;break;
+case 11: epoch_seconds += 26265600;break;
+case 12: epoch_seconds += 28857600;break;
+}
+//Add in fully completed days
+epoch_seconds += (day - 1)*86400;
+
+//Add in fully completed hours
+//No -1 because hour starts at 0
+epoch_seconds += hour*3600;
+
+//Add in fully completed minutes
+epoch_seconds += minute*60;
+epoch_seconds += second;
+
+
+return(epoch_seconds); //Function TIME_EncodeEpoch()
+	
+}// end of TIME_EncodeEpoch
 
 
 

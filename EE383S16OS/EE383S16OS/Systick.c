@@ -84,6 +84,7 @@ void SysTick_Handler()
 	{
 		count = 0;
 		//here we need to switch tasks
+		// PArt 1
 		GPIOPortF_Handler();
 		//EPOCH_SECONDS++;
 	}
