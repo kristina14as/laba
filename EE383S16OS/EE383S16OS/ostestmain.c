@@ -32,45 +32,45 @@ void shell(void);
 
 void Zero(void)
 	{
-	while(1) 
-	   putchar('0');
+	//while(1) 
+	//   putchar('0');
   //tasks should not end
 	
 	
-//	 while(1) 
-//	{   
-//		software_delay_halfsecond();               
-//		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
-//	} 
+	 while(1) 
+	{   
+		software_delay_halfsecond();               
+		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+	} 
 	
 	}
 
 void One(void)
 	{
 
-	while(1)  
-		putchar('1');
+	//while(1)  
+	//	putchar('1');
 	
-// while(1) 
-//	{   
-//		software_delay_halfsecond();               
-//		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
-//	}  
+ while(1) 
+	{   
+		software_delay_halfsecond();               
+		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+	}  
 	
 	} // end the 
 	
 void Two(void)
 	{
 
-	while (1) 
-		putchar('2');
+	//while (1) 
+	//	putchar('2');
   //tasks should not end
 	
-//	 while(1) 
-//	{   
-//		software_delay_halfsecond();               
-//		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
-//	} 
+	 while(1) 
+	{   
+		software_delay_halfsecond();               
+		PF2 ^= 0x04;     // toggle PF2 (Blue LED) 
+	} 
 	
 } 
 	
