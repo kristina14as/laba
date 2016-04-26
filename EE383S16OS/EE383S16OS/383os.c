@@ -17,6 +17,9 @@ static void InitSystem(void);
 static void NullTask(void);
 void EdgeCounter_Init(void);
 
+TaskControlBlock* getCurrentTask(void) {
+	return CURRENT_TASK;
+}
 
             /* Start the multi-tasking system */
 int StartScheduler(void)

@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "383os.h"
 #include "Systick.h"
 
@@ -104,7 +105,75 @@ void  execute(char **argv)
 }
 
 void ps() {
-		printf("%-10s%-5s%-10s%-10s%-10s%-5s%-15s\n", "USER", "TID", "%CPU", "STK_SZ", "%STK", "STATE", "ADDR");
+	int taskCount = 1;
+	
+	int stackP, stackStart, stackEnd, stackPDif, stackEndDif, addr, perCPU;
+	char *state;
+	unsigned long stackSize;
+	int perStk;
+	TaskControlBlock *currentTask = getCurrentTask();
+	TaskControlBlock *tempTask = currentTask;
+	while((tempTask = tempTask->next) != currentTask) {
+		taskCount++;
+	}
+	
+	addr = (int) currentTask;
+	stackStart = (int) currentTask->stack_start;
+	stackEnd = (int) currentTask->stack_end;
+	stackP = (int) currentTask->sp;
+	stackSize = stackEnd - stackStart;
+	stackPDif = stackP - stackStart;
+	stackEndDif = stackEnd - stackStart;
+	perCPU = 100 / taskCount;
+	perStk = (stackPDif * 100) / stackEndDif;
+	
+	switch (currentTask->state) {
+		case T_CREATED:
+			state = "Created";
+			break;
+		case T_READY:
+			state = "Ready";
+			break;
+		case T_RUNNING:
+			state = "Running";
+			break;
+		default:
+			state = "Unknown";
+			break;
+	}
+	
+	printf("%-10s%-5s%-10s%-10s%-10s%-10s%-15s\n", "USER", "TID", "%CPU", "STK_SZ", "%STK", "STATE", "ADDR");
+	printf("%-10s%-5u%-10d%-10lu%-10d%-10s%#010x\n", "root", currentTask->tid, perCPU, stackSize, perStk, state, addr);
+	
+	tempTask = currentTask;
+	while((tempTask = tempTask->next) != currentTask) {
+		addr = (int) tempTask;
+		stackStart = (int) tempTask->stack_start;
+		stackEnd = (int) tempTask->stack_end;
+		stackP = (int) tempTask->sp;
+		stackSize = stackEnd - stackStart;
+		stackPDif = stackP - stackStart;
+		stackEndDif = stackEnd - stackStart;
+		perCPU = 100 / taskCount;
+		perStk = (stackPDif * 100) / stackEndDif;
+	
+		switch (tempTask->state) {
+			case T_CREATED:
+				state = "Created";
+				break;
+			case T_READY:
+				state = "Ready";
+				break;
+			case T_RUNNING:
+				state = "Running";
+				break;
+			default:
+				state = "Unknown";
+				break;
+		}
+		
+		printf("%-10s%-5u%-10d%-10lu%-10d%-10s%#010x\n", "root", tempTask->tid, perCPU, stackSize, perStk, state, addr);
+	}
 }
 
 // -----------------------------------------------------------------

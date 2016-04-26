@@ -8,7 +8,7 @@
 /* Number of tasks, change this to suit your need
  */
 #ifndef NUM_TASKS
-#define NUM_TASKS	5
+#define NUM_TASKS	6
 #endif
 
 #define NULL 0
@@ -50,5 +50,6 @@ typedef struct TaskControlBlock
 	unsigned char	*sp;		/* current value of the stack pointer */
 	} TaskControlBlock;
 
-
+TaskControlBlock* getCurrentTask(void);
+	
 #endif
