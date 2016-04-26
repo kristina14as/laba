@@ -7,7 +7,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "383os.h"
+#include "Systick.h"
 
+extern void delay(uint32_t);
 void prmsg(char *);
 int strcmp(const char *s1, const char *s2);
 
@@ -24,8 +26,9 @@ void time(void)
 {  
 unsigned char h,m,s;
  // Replace this with your print function or Unix time.
-  printf("\nThe time is: "); 
-  printf("%d:%d:%d\n",(int)h,(int)m,(int)s); // these variables will change in the background
+//  printf("\nThe time is: "); 
+//  printf("%d:%d:%d\n",(int)h,(int)m,(int)s); // these variables will change in the background
+	TIME_PrintEpochTime(EPOCH_SECONDS);
 }
 
 // -----------------------------------------------------------------
@@ -35,13 +38,17 @@ unsigned char h,m,s;
 
 void settime(char *instr)
 {  
-  int valid;
+//  int valid;
 
-  do{
-      printf("\n Set time to %s\n",instr);  // prompt user
- //     gets(str);  /repromt user?
-		  valid=1;
-  }while (valid==0);
+//  do{
+//      printf("\n Set time to %s\n",instr);  // prompt user
+// //     gets(str);  /repromt user?
+//		  valid=1;
+//  }while (valid==0);
+	
+	EPOCH_SECONDS = TIME_GetTime(instr);
+//	EPOCH_SECONDS++;
+//	delay(1);
 
 }
 

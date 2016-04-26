@@ -44,3 +44,7 @@ void SysTick_Wait(unsigned long delay);
 // Time delay using busy wait.
 // This assumes 50 MHz system clock.
 void SysTick_Wait10ms(unsigned long delay);
+
+void TIME_PrintEpochTime(int32_t epoch_time);
+int32_t TIME_GetTime(char *in);
+int32_t TIME_EncodeEpoch( uint32_t year, uint32_t month, uint32_t day, uint32_t hour, uint32_t minute, uint32_t second);

@@ -7,6 +7,9 @@
 ; Useful declarations
 
 GPIO_PORTF_ICR_R        EQU   0x4002541C  ; interrupt flag for PortF
+PF2 	EQU 0x40025010
+
+
 	
 SWITCH_COUNT EQU 0  ; Number of SYstick interrupts before a context switch
 INTERRUPT_LR EQU 0xfffffff9  ; Number of SYstick interrupts before a context switch
@@ -16,16 +19,21 @@ INTERRUPT_LR EQU 0xfffffff9  ; Number of SYstick interrupts before a context swi
 	AREA DATA, ALIGN=2
 		; Global variables go here
 
+COUNT SPACE 4
 INT_COUNT SPACE 4
 
+
+	EXTERN EPOCH_SECONDS
 	EXTERN Schedule
 		
 	ALIGN ; make sure the end of this section is aligned
+
 	AREA |.text|, CODE, READONLY, ALIGN=2
 		
 	EXPORT GPIOPortF_Handler
 	EXPORT SysTick_Handler
 	EXPORT StartNewTask
+	EXPORT COUNT
 		
 GPIOPortF_Handler
 	 ; This isr will context switch every SWITCH_COUNT ticks
@@ -40,6 +48,20 @@ GPIOPortF_Handler
 	 bx lr		    ; return from ISR
 SysTick_Handler
 	; This isr will context switch every SWITCH_COUNT ticks
+	; the 4 lines below cause the blue led to toggle for part 1
+	;LDR R1, =PF2
+	;LDR R0, [R1]
+	;EOR R0, R0, #0x04
+	;STR R0, [R1]
+	
+	LDR R4, = COUNT
+	LDR R5, [R4]
+	ADD R5, R5, #1
+	CMP R5, #10
+	BEQ reset
+	
+continue
+	 STR R5, [R4]
 	 ldr r0, =GPIO_PORTF_ICR_R
 	 mov r1, #0x10
 	 str r1,[r0]    ; acknowledge flag4
@@ -49,6 +71,16 @@ SysTick_Handler
 	 blo context_sw ; perform context switch
 	 str r1,[r0]
 	 bx lr		    ; return from ISR
+	 
+reset
+	LDR R2, =EPOCH_SECONDS
+	LDR R3, [R2]
+	ADD R3, R3, #1
+	STR R3, [R2]
+	MOV R5, #0
+	B continue
+
+
 context_sw
 	 mov r1,#SWITCH_COUNT
 	 str r1,[r0]    ;reset INT_COUNT
