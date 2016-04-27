@@ -5,6 +5,7 @@
 #ifndef _383OS_H
 #define _383OS_H
 
+#include <stdbool.h>
 /* Number of tasks, change this to suit your need
  */
 #ifndef NUM_TASKS
@@ -16,6 +17,14 @@
 int CreateTask(void (*func)(void), 
                     unsigned char *stack_start, 
                     unsigned stack_size);
+										
+int CreateShellTask(void (*func)(void), 
+                    unsigned char *stack_start,
+                    unsigned stack_size);
+										
+int CreateTaskImpl(void (*func)(void), 
+                    unsigned char *stack_start,
+                    unsigned stack_size, bool isShell);
 
 int StartScheduler(void);
 unsigned char * StartNewTask(unsigned char * x,uint32_t y);

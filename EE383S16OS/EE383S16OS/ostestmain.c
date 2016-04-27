@@ -134,7 +134,8 @@ int main(void) {
 
 	// Create tasks that will run (these are functions that do not return)
 	
-	CreateTask(shell, task_shell_stack, sizeof (task_shell_stack));
+	CreateShellTask(shell, task_shell_stack, sizeof (task_shell_stack));
+	
 	CreateTask(Zero, task_zero_stack, sizeof (task_zero_stack));
 	CreateTask(One, task_one_stack, sizeof (task_one_stack));
 	CreateTask(Two, task_two_stack, sizeof (task_two_stack));

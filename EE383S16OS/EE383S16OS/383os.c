@@ -10,6 +10,7 @@
 
 static TaskControlBlock task_list[NUM_TASKS], *TASK_LIST_PTR;
 static TaskControlBlock *CURRENT_TASK;
+static TaskControlBlock *SHELL_TASK;
 
 static int NEXT_TID;
 static unsigned char null_task_stack[60];  // is not used, null task uses original system stack
@@ -33,6 +34,16 @@ int StartScheduler(void)
 	return 0;	 
 	}
 
+int CreateShellTask(void (*func)(void), 
+                    unsigned char *stack_start,
+                    unsigned stack_size)
+		{
+				int tid = CreateTaskImpl((*func), 
+                    stack_start,
+                    stack_size, true);							
+				return tid;							
+		}
+	
 /* Create a new process and link it to the task list
  */
 int CreateTask(void (*func)(void), 
@@ -40,7 +51,15 @@ int CreateTask(void (*func)(void),
                     unsigned stack_size)
 					//,unsigned ticks)
 	{
-//	long ints;
+		int tid = CreateTaskImpl((*func), stack_start, stack_size, false);
+		return tid;
+	}
+	
+int CreateTaskImpl(void (*func)(void), 
+                    unsigned char *stack_start,
+                    unsigned stack_size, bool isShell)
+										{
+											//	long ints;
 	TaskControlBlock *p, *next;
 
 	if (TASK_LIST_PTR == 0)
@@ -60,14 +79,21 @@ int CreateTask(void (*func)(void),
 	p->sp = p->stack_end;
 
 	           /* create a circular linked list */
-	if (CURRENT_TASK == NULL)
+	if (CURRENT_TASK == NULL) {
 		p->next = p, CURRENT_TASK = p;
-	else
+	} else {
 		next = CURRENT_TASK->next, CURRENT_TASK->next = p, p->next = next;
-//  EndCritical(ints);
-	return p->tid;
 	}
-
+	
+	if (isShell) {
+		//special shell handling
+		//we are assuming there is only one shell at a time
+		//if this is called and there is already a shell, 
+		SHELL_TASK = p;
+	}
+//  EndCritical(ints);
+	return p->tid;			
+										}
 /* Initialize the system.
  */
 static void InitSystem(void)
