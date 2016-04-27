@@ -22,6 +22,8 @@ int CreateShellTask(void (*func)(void),
                     unsigned char *stack_start,
                     unsigned stack_size);
 										
+
+										
 int CreateTaskImpl(void (*func)(void), 
                     unsigned char *stack_start,
                     unsigned stack_size, bool isShell);
@@ -60,5 +62,7 @@ typedef struct TaskControlBlock
 	} TaskControlBlock;
 
 TaskControlBlock* getCurrentTask(void);
+TaskControlBlock* getShellTask(void);
+TaskControlBlock* getPreviousTask(TaskControlBlock *task);
 	
 #endif

@@ -22,6 +22,55 @@ TaskControlBlock* getCurrentTask(void) {
 	return CURRENT_TASK;
 }
 
+TaskControlBlock* getShellTask(void) {
+	return SHELL_TASK;
+}
+
+TaskControlBlock* getNullTask(void) {
+	int i;
+	TaskControlBlock* task = getCurrentTask();
+	for (i=0; i<NUM_TASKS; i++) {
+		if (task->tid == 0) {
+			return task;
+		}
+		task = task->next;
+	}
+	printf("ERROR on GetNullTask");
+	return task;
+}
+
+
+TaskControlBlock* getPreviousTask(TaskControlBlock *task) {
+	int i;
+	TaskControlBlock *tempTask = task;
+	for( i=0; i < NUM_TASKS; i++) {
+		if (tempTask->next == task) {
+			return tempTask;
+		}
+		//otherwise, keep going
+		tempTask = tempTask->next;
+	}
+	//if we get here something fucky happened
+	printf("ERROR on getPreviousTask");
+	return task;
+}
+
+bool isShellSuspended(void) {
+	int i;
+	TaskControlBlock* null = getNullTask();
+	TaskControlBlock* temp = getNullTask()->next;
+	for(i = 0; i < NUM_TASKS; i++) {
+		if (temp == SHELL_TASK) {
+			return false;
+		}
+		//keep going
+		temp = temp->next;
+	}
+	return true;
+}
+	
+	
+
             /* Start the multi-tasking system */
 int StartScheduler(void)
 	{
@@ -33,6 +82,31 @@ int StartScheduler(void)
   NullTask();                   // Will not return
 	return 0;	 
 	}
+
+void ResumeShellTask() {
+	
+
+	TaskControlBlock* nullTask = getNullTask();
+	TaskControlBlock* nextTask = nullTask->next;
+	TaskControlBlock* shell = getShellTask();
+	
+	if (!isShellSuspended()) {
+		//the shell is already running!
+		return;
+	}
+	
+	nullTask->next = shell;
+	shell->next = nextTask;
+	
+}	
+	
+void SuspendShellTask() {
+	//first, get a reference to the task before and the task after the shell in the tasks array
+	TaskControlBlock* previous = getPreviousTask(getShellTask());
+	TaskControlBlock* next = getShellTask()->next;
+	//skip the shell task
+	previous->next = next;
+}
 
 int CreateShellTask(void (*func)(void), 
                     unsigned char *stack_start,
