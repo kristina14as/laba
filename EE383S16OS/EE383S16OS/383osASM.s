@@ -64,7 +64,12 @@ SysTick_Handler
 	CMP R5, #10
 	BEQ reset
 
-
+etx_test
+	LDR R0, =UART0_DR_R
+	LDR R1, [R0]
+	CMP R1, #0x03
+	BEQ handleETX ;if the character in the RXFE is \c ETF code
+	B continue
 check_etx
 	LDR R0, =UART0_FR_R
 	LDR R1, [R0]
@@ -72,11 +77,7 @@ check_etx
 	LDR R2, [R0]
 	AND R0, R1, R2
 	CMP R0, #0		;if there is no character in the RXFE
-	BNE continue
-	LDR R0, =UART0_DR_R
-	LDR R1, [R0]
-	CMP R1, #0x03
-	BEQ handleETX ;if the character in the RXFE is \c ETF code
+	BEQ etx_test
 continue
 	 STR R5, [R4]
 	 ldr r0, =GPIO_PORTF_ICR_R
