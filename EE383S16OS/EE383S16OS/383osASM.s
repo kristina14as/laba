@@ -14,7 +14,10 @@ PF2 	EQU 0x40025010
 SWITCH_COUNT EQU 0  ; Number of SYstick interrupts before a context switch
 INTERRUPT_LR EQU 0xfffffff9  ; Number of SYstick interrupts before a context switch
     THUMB
-		
+	
+UART0_FR_R		EQU 0x4000C018
+UART_FR_RXFE	EQU 0x00000010
+UART0_DR_R      EQU 0x4000C000
 	
 	AREA DATA, ALIGN=2
 		; Global variables go here
@@ -34,6 +37,7 @@ INT_COUNT SPACE 4
 	EXPORT SysTick_Handler
 	EXPORT StartNewTask
 	EXPORT COUNT
+	IMPORT handleETX
 		
 GPIOPortF_Handler
 	 ; This isr will context switch every SWITCH_COUNT ticks
@@ -59,7 +63,20 @@ SysTick_Handler
 	ADD R5, R5, #1
 	CMP R5, #10
 	BEQ reset
-	
+
+
+check_etx
+	LDR R0, =UART0_FR_R
+	LDR R1, [R0]
+	LDR R0, =UART_FR_RXFE
+	LDR R2, [R0]
+	AND R0, R1, R2
+	CMP R0, #0		;if there is no character in the RXFE
+	BNE continue
+	LDR R0, =UART0_DR_R
+	LDR R1, [R0]
+	CMP R1, #0x03
+	BEQ handleETX ;if the character in the RXFE is \c ETF code
 continue
 	 STR R5, [R4]
 	 ldr r0, =GPIO_PORTF_ICR_R
@@ -78,8 +95,7 @@ reset
 	ADD R3, R3, #1
 	STR R3, [R2]
 	MOV R5, #0
-	B continue
-
+	B check_etx
 
 context_sw
 	 mov r1,#SWITCH_COUNT

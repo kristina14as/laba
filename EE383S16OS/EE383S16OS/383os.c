@@ -11,6 +11,7 @@
 static TaskControlBlock task_list[NUM_TASKS], *TASK_LIST_PTR;
 static TaskControlBlock *CURRENT_TASK;
 static TaskControlBlock *SHELL_TASK;
+static TaskControlBlock *UF_TASK; //the task running in place of the shell, IF THERE IS ONE
 
 static int NEXT_TID;
 static unsigned char null_task_stack[60];  // is not used, null task uses original system stack
@@ -106,6 +107,10 @@ void SuspendShellTask() {
 	TaskControlBlock* next = getShellTask()->next;
 	//skip the shell task
 	previous->next = next;
+}
+
+void handleETX() {
+	printf("Leaving");
 }
 
 int CreateShellTask(void (*func)(void), 
