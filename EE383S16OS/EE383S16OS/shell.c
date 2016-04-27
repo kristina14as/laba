@@ -176,6 +176,18 @@ void ps() {
 	}
 }
 
+void testSuspend() {
+	while (1) {
+		printf("hello_world_");
+	}
+}
+
+void launchTestSuspend() {
+	unsigned char task_ts_stack[1024];
+	CreateTask(testSuspend, task_ts_stack, sizeof (task_ts_stack));
+	SuspendShellTask();
+}
+
 // -----------------------------------------------------------------
 // implementation of 383 shell
 // -----------------------------------------------------------------
@@ -204,6 +216,8 @@ void  shell(void)
 		      temp();   //temp(argv[1]);
 					else if (strcmp(argv[0], "ps") == 0)
 					ps();
+					else if (strcmp(argv[0], "testsuspend") == 0)
+					launchTestSuspend();
 					else if (strcmp(argv[0], "i") == 0)
 		      puts("an i\n");   //
 					else if (*argv[0] != 0 && argv[0] != 0) 

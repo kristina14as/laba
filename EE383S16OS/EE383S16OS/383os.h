@@ -9,7 +9,7 @@
 /* Number of tasks, change this to suit your need
  */
 #ifndef NUM_TASKS
-#define NUM_TASKS	6
+#define NUM_TASKS	20
 #endif
 
 #define NULL 0
@@ -27,6 +27,9 @@ int CreateShellTask(void (*func)(void),
 int CreateTaskImpl(void (*func)(void), 
                     unsigned char *stack_start,
                     unsigned stack_size, bool isShell);
+										
+void ResumeShellTask(void);
+void SuspendShellTask(void);
 
 int StartScheduler(void);
 unsigned char * StartNewTask(unsigned char * x,uint32_t y);
@@ -64,5 +67,6 @@ typedef struct TaskControlBlock
 TaskControlBlock* getCurrentTask(void);
 TaskControlBlock* getShellTask(void);
 TaskControlBlock* getPreviousTask(TaskControlBlock *task);
+	
 	
 #endif

@@ -25,6 +25,7 @@ typedef enum {GREEN, RED, BLUE} led_color_type;
 unsigned char task_zero_stack[MIN_STACK_SIZE]; // Declare a seperate stack 
 unsigned char task_one_stack[MIN_STACK_SIZE];  // for each task
 unsigned char task_two_stack[MIN_STACK_SIZE];
+
 unsigned char task_shell_stack[1024];
 
 void PortF_Init(void);
@@ -38,6 +39,7 @@ void delay(unsigned long time);
 
 // Function Prototypes
 void shell(void);
+void testSuspend(void);
 
 void Zero(void)
 	{
