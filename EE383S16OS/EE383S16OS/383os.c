@@ -115,6 +115,7 @@ void ResumeShellTask() {
 	
 	if (!isShellSuspended()) {
 		//the shell is already running!
+		printf("The shell is already running!\n");
 		return;
 	}
 	
