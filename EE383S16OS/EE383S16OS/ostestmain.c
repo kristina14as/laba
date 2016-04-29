@@ -26,7 +26,7 @@ unsigned char task_zero_stack[MIN_STACK_SIZE]; // Declare a seperate stack
 unsigned char task_one_stack[MIN_STACK_SIZE];  // for each task
 unsigned char task_two_stack[MIN_STACK_SIZE];
 
-unsigned char task_shell_stack[1024];
+unsigned char task_shell_stack[2048];
 
 void PortF_Init(void);
 void One(void);

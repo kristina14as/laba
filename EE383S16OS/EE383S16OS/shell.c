@@ -7,8 +7,10 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "UART.h"
 #include "383os.h"
 #include "Systick.h"
+#include "tm4c123gh6pm.h"
 
 void handleETX(void);
 extern void delay(uint32_t);
@@ -209,8 +211,130 @@ void kill(char **argv) {
 			printf("Failed to kill process with TID %d\n",num);
 		}
 	}
-	
-	
+}
+
+void tipCalculator(void){
+long billDollar;
+long billCent;
+long tipDollar;
+long tipPercent;
+printf("\nEnter the total amount on your bill(exclude the decimal): ");
+billDollar = UART_InUDec();
+billCent = billDollar % 100;
+//billDollar = billDollar/100;
+printf("\nYour bill is: %ld.%ld\n", billDollar/100,billCent);
+printf("Enter the percentage you would like to tip: ");
+tipPercent = UART_InUDec();
+tipDollar = (tipPercent* billDollar) / 100;
+tipPercent = tipDollar % 100;
+tipDollar = tipDollar/100;
+//printf("\nPercentage:%ld\nAmount: %ld", tipPercent,tipDollar,tipPercent);
+printf("\nYou should tip approximately $%ld.%ld\n\n", tipDollar,tipPercent);
+	handleETX();
+}
+
+void hiLo(void){
+int ourCard;
+int comCard;
+int myWinCount = 0;
+  int comWinCount = 0;
+int i;
+bool gameOver = false;
+printf("\nWelcome to the High/Low card game!\n");
+printf("The first to win 5 games is the winner!\n\n");
+while (!gameOver){
+i++;
+ourCard = ((NVIC_ST_CURRENT_R << 9) % 14) +1;
+comCard = ((NVIC_ST_CURRENT_R << 11) % 14) +1;
+printf("Deal #%i \nYour card: %i Computer card: %i", i, ourCard, comCard);
+if (ourCard > comCard) {
+myWinCount = myWinCount + 1;
+printf("\nYou won!\n");
+}
+else if (comCard > ourCard){
+comWinCount ++;
+printf("\nYou lost!\n");
+}
+else 
+printf("\nIt was a tie!\n");
+if (myWinCount == 5)
+gameOver = true;
+else if (comWinCount == 5)
+gameOver = true;
+printf("Current Score - You: %i Computer: %i\n", myWinCount, comWinCount);
+printf("Press a key to continue to next deal\n\n");
+UART_InChar();
+}
+if (myWinCount == 5)
+printf("Congrats, you beat the computer!\n");
+else
+printf("Sorry, you lost. Better luck next time!\n");
+
+handleETX();
+}
+
+void ascii() {
+		 int i = 0;
+       char character;
+ 
+       for (i = 0; i < 256; i++) {
+             printf("%c ", character);
+             character = character + 1;
+       }
+		handleETX();
+}
+
+void dec_hex(long int num)  
+{
+       long int rem[50], i = 0, length = 0;
+ 
+       while (num>0)
+       {
+             rem[i] = num % 16;
+             num = num / 16;
+             i++;
+             length++;
+       }
+ 
+       printf("Hexadecimal number : ");
+       for (i = length - 1; i >= 0; i--)
+       {
+             switch (rem[i])
+             {
+             case 10:
+                    printf("A");
+                    break;
+             case 11:
+                    printf("B");
+                    break;
+             case 12:
+                    printf("C");
+                    break;
+             case 13:
+                    printf("D");
+                    break;
+             case 14:
+                    printf("E");
+                    break;
+             case 15:
+                    printf("F");
+                    break;
+             default:
+                    printf("%ld", rem[i]);
+             }
+       }
+}
+
+void dhex()
+{
+       long int num;
+				printf("\n\n");
+				printf("Enter the decimal number : ");
+				scanf("%ld", &num);
+				printf("\n\n");
+				dec_hex(num);   // Calling function
+				printf("\n\n");
+				handleETX();
 }
 
 // -----------------------------------------------------------------
@@ -244,6 +368,22 @@ void  shell(void)
 				}else if (strcmp(argv[0], "ts") == 0){
 					unsigned char task_stack[1024];
 					CreateUFTask(testSuspend, task_stack, sizeof(task_stack));
+					delay(1);
+				}else if (strcmp(argv[0], "hilo") == 0){
+					unsigned char task_stack[1024];
+					CreateUFTask(hiLo, task_stack, sizeof(task_stack));
+					delay(1);
+				}else if (strcmp(argv[0], "tip") == 0){
+					unsigned char task_stack[1024];
+					CreateUFTask(tipCalculator, task_stack, sizeof(task_stack));
+					delay(1);
+				}else if (strcmp(argv[0], "ascii") == 0){
+					unsigned char task_stack[1024];
+					CreateUFTask(ascii, task_stack, sizeof(task_stack));
+					delay(1);
+				}else if (strcmp(argv[0], "dhex") == 0){
+					unsigned char task_stack[1024];
+					CreateUFTask(dhex, task_stack, sizeof(task_stack));
 					delay(1);
 				}else if (strcmp(argv[0], "kill") == 0){
 					kill(argv);
