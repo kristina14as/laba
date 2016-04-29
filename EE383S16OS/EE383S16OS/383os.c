@@ -110,17 +110,21 @@ int StartScheduler(void)
 void ResumeShellTask() {
 	
 	TaskControlBlock* nullTask = getNullTask();
-	TaskControlBlock* nextTask = nullTask->next;
+	TaskControlBlock* prevTask = getPreviousTask(nullTask);
 	TaskControlBlock* shell = getShellTask();
-	
-	if (!isShellSuspended()) {
-		//the shell is already running!
-		printf("The shell is already running!\n");
-		return;
+	if (shell == 0 || prevTask == 0) {
+			printf("Resuming shell task failed");
 	}
+//	if (!isShellSuspended()) {
+//		//the shell is already running!
+//		printf("The shell is already running!\n");
+//		return;
+//	}
 	
-	nullTask->next = shell;
-	shell->next = nextTask;
+	prevTask->next = shell;
+	shell->next = nullTask;
+	//nullTask->next = shell;
+	
 	
 }	
 	
@@ -132,7 +136,7 @@ void SuspendShellTask() {
 	previous->next = next;
 }
 
-void handleETX() {
+void handleETX(void) {
 	printf("\n383# ");
 	DeleteUFTask();
 	ResumeShellTask();
@@ -142,6 +146,9 @@ void DeleteUFTask(void) {
 	//first, get a reference to the task before and the task after the UF in the tasks array
 	TaskControlBlock* previous = getPreviousTask(getUFTask());
 	TaskControlBlock* next = getUFTask()->next;
+	if (previous == 0 || next == 0) {
+			printf("Deleting UF task failed");
+	}
 	//skip the UF task
 	previous->next = next;
 	//TASK_LIST_PTR = getUFTask();

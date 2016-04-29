@@ -9,7 +9,7 @@
 /* Number of tasks, change this to suit your need
  */
 #ifndef NUM_TASKS
-#define NUM_TASKS	999
+#define NUM_TASKS	250
 #endif
 
 #define NULL 0

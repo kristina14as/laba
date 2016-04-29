@@ -10,6 +10,7 @@
 #include "383os.h"
 #include "Systick.h"
 
+void handleETX(void);
 extern void delay(uint32_t);
 void prmsg(char *);
 int strcmp(const char *s1, const char *s2);
@@ -180,6 +181,7 @@ void testSuspend() {
 	ps();
 	printf("\n");
 	printf("suspended#");
+	
 	while (1) {
 		
 	}
@@ -240,8 +242,9 @@ void  shell(void)
 				}else if (strcmp(argv[0], "ps") == 0){
 					ps();
 				}else if (strcmp(argv[0], "ts") == 0){
-					unsigned char task_stack[128];
+					unsigned char task_stack[1024];
 					CreateUFTask(testSuspend, task_stack, sizeof(task_stack));
+					delay(1);
 				}else if (strcmp(argv[0], "kill") == 0){
 					kill(argv);
 				}else if (*argv[0] != 0 && argv[0] != 0){ 
