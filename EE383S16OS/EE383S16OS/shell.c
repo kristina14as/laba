@@ -101,7 +101,6 @@ void  execute(char **argv)
 	  putchar(' ');
   }
   printf("\n");
-
 }
 
 void ps() {
@@ -177,15 +176,39 @@ void ps() {
 }
 
 void testSuspend() {
+	printf("\n");
+	ps();
+	printf("\n");
+	printf("suspended#");
 	while (1) {
-		printf("hello_world_");
+		
 	}
 }
 
-void launchTestSuspend() {
-	unsigned char task_ts_stack[1024];
-	CreateTask(testSuspend, task_ts_stack, sizeof (task_ts_stack));
-	SuspendShellTask();
+void kill(char **argv) {
+	
+	int num;
+	
+	int errno = 0;
+	long conv = strtol(argv[1], &argv[1], 10);
+
+	// Check for errors: e.g., the string does not represent an integer
+	// or the integer is larger than int
+	if (errno != 0 || *argv[1] != '\0' || conv > NUM_TASKS) {
+    // Put here the handling of the error, like exiting the program with
+    // an error message
+		printf("Usage: \"kill <TID>\"\nYou can't kill TID 0 or 1, and the TID must be active to kill it.\n");
+	} else {
+    // No error
+    num = conv;    
+    if (DeleteTask(num)) {
+			printf("Killed process with TID %d\n", num);
+		} else {
+			printf("Failed to kill process with TID %d\n",num);
+		}
+	}
+	
+	
 }
 
 // -----------------------------------------------------------------
@@ -202,28 +225,31 @@ void  shell(void)
           printf("383# ");     /*   display a prompt             */
 		      gets(line);          // get a line from the user
           parse(line, argv);       /*   parse the line               */
-          if (strcmp(argv[0], "exit") == 0 || strcmp(argv[0], "quit") == 0 ) {
+          if (strcmp(argv[0], "exit") == 0 || strcmp(argv[0], "quit") == 0 || strcmp(argv[0], "logout") == 0 ) {
 		                   /* is it an "exit"?     */
-                printf("Exiting...\n");
+                printf("[Process completed]\n");
 				return;
 
 				//exit(0);            
-	      } else if (strcmp(argv[0], "time") == 0)
+	      } else if (strcmp(argv[0], "time") == 0){
 		      time();   //time(argv[1]);
-	        else if (strcmp(argv[0], "settime") == 0)
+				}else if (strcmp(argv[0], "settime") == 0){
 		      settime(argv[1]);   //settime(argv[1]);
-          else if (strcmp(argv[0], "temp") == 0)
+				}else if (strcmp(argv[0], "temp") == 0){
 		      temp();   //temp(argv[1]);
-					else if (strcmp(argv[0], "ps") == 0)
+				}else if (strcmp(argv[0], "ps") == 0){
 					ps();
-					else if (strcmp(argv[0], "testsuspend") == 0)
-					launchTestSuspend();
-					else if (strcmp(argv[0], "i") == 0)
-		      puts("an i\n");   //
-					else if (*argv[0] != 0 && argv[0] != 0) 
-		      execute(argv);    /* if not empy line execute command as new process*/
-					else
+				}else if (strcmp(argv[0], "ts") == 0){
+					unsigned char task_stack[128];
+					CreateUFTask(testSuspend, task_stack, sizeof(task_stack));
+				}else if (strcmp(argv[0], "kill") == 0){
+					kill(argv);
+				}else if (*argv[0] != 0 && argv[0] != 0){ 
+					printf("\n-383: %s: command not found\n", argv[0]);
+		      //execute(argv);    /* if not empty line execute command as new process*/
+				}else{
 					putchar('\n');
+				}
      }//while(1)
 }
 

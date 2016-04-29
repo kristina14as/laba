@@ -160,6 +160,7 @@ return(epoch_sec); //Function TIME_EncodeEpoch()
 }// end of TIME_EncodeEpoch
 
 //number of half seconds to delay
+//do not use
 void delay(unsigned long time){
   unsigned long i;
   while(time > 0){

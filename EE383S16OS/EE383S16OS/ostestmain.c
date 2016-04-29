@@ -50,8 +50,7 @@ void Zero(void)
 	
 	 while(1) 
 	{   
-		delay(1);
-		delay(1);
+		//delay(1);
 		//putchar('0');
 		toggle_led(BLUE);
 	} 
@@ -66,7 +65,7 @@ void One(void)
 	
  while(1) 
 		{   
-		delay(1); 
+		//delay(1);
 		//putchar('1');			
 		toggle_led(RED);
 	}  
@@ -82,9 +81,7 @@ void Two(void)
 	
 	while(1) 
 	{   
-		delay(1);
-		delay(1);
-		delay(1);
+		//delay(1);
 		//putchar('2');
 		toggle_led(GREEN);
 	} 
@@ -138,9 +135,9 @@ int main(void) {
 	
 	CreateShellTask(shell, task_shell_stack, sizeof (task_shell_stack));
 	
-	CreateTask(Zero, task_zero_stack, sizeof (task_zero_stack));
-	CreateTask(One, task_one_stack, sizeof (task_one_stack));
-	CreateTask(Two, task_two_stack, sizeof (task_two_stack));
+	//CreateTask(Zero, task_zero_stack, sizeof (task_zero_stack));
+	//CreateTask(One, task_one_stack, sizeof (task_one_stack));
+	//CreateTask(Two, task_two_stack, sizeof (task_two_stack));
 	
 	puts("\nStarting Scheduler...");
 	

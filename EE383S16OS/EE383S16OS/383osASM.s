@@ -37,6 +37,7 @@ INT_COUNT SPACE 4
 	EXPORT SysTick_Handler
 	EXPORT StartNewTask
 	EXPORT COUNT
+	EXPORT continue_ack
 	IMPORT handleETX
 		
 GPIOPortF_Handler
@@ -78,7 +79,7 @@ check_etx
 	AND R0, R1, R2
 	CMP R0, #0		;if there is no character in the RXFE
 	BEQ etx_test
-continue
+continue_ack
 	 STR R5, [R4]
 	 ldr r0, =GPIO_PORTF_ICR_R
 	 mov r1, #0x10
@@ -89,7 +90,18 @@ continue
 	 blo context_sw ; perform context switch
 	 str r1,[r0]
 	 bx lr		    ; return from ISR
-	 
+check_etx
+	LDR R0, =UART0_FR_R
+	LDR R1, [R0]
+	LDR R0, =UART_FR_RXFE
+	LDR R2, [R0]
+	AND R0, R1, R2
+	CMP R0, #0		;if there is no character in the RXFE
+	BNE continue_ack
+	LDR R0, =UART0_DR_R
+	LDR R1, [R0]
+	CMP R1, #0x03
+	BEQ handleETX ;if the character in the RXFE is \c ETF code 
 reset
 	LDR R2, =EPOCH_SECONDS
 	LDR R3, [R2]
@@ -97,7 +109,6 @@ reset
 	STR R3, [R2]
 	MOV R5, #0
 	B check_etx
-
 context_sw
 	 mov r1,#SWITCH_COUNT
 	 str r1,[r0]    ;reset INT_COUNT

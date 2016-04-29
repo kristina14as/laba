@@ -9,13 +9,17 @@
 /* Number of tasks, change this to suit your need
  */
 #ifndef NUM_TASKS
-#define NUM_TASKS	20
+#define NUM_TASKS	999
 #endif
 
 #define NULL 0
 
 int CreateTask(void (*func)(void), 
                     unsigned char *stack_start, 
+                    unsigned stack_size);
+
+int CreateUFTask(void (*func)(void), 
+                    unsigned char *stack_start,
                     unsigned stack_size);
 										
 int CreateShellTask(void (*func)(void), 
@@ -26,10 +30,11 @@ int CreateShellTask(void (*func)(void),
 										
 int CreateTaskImpl(void (*func)(void), 
                     unsigned char *stack_start,
-                    unsigned stack_size, bool isShell);
+                    unsigned stack_size, bool isShell, bool isUF);
 										
 void ResumeShellTask(void);
 void SuspendShellTask(void);
+void DeleteUFTask(void);
 
 int StartScheduler(void);
 unsigned char * StartNewTask(unsigned char * x,uint32_t y);
@@ -67,6 +72,8 @@ typedef struct TaskControlBlock
 TaskControlBlock* getCurrentTask(void);
 TaskControlBlock* getShellTask(void);
 TaskControlBlock* getPreviousTask(TaskControlBlock *task);
-	
+TaskControlBlock* getUFTask(void);
+void setUFTask(TaskControlBlock *newUFTask);
+bool DeleteTask(int tid);
 	
 #endif

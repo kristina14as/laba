@@ -27,6 +27,29 @@ TaskControlBlock* getShellTask(void) {
 	return SHELL_TASK;
 }
 
+TaskControlBlock* getUFTask(void) {
+		return UF_TASK;
+}
+
+TaskControlBlock* getTask(int tid) {
+	int i;
+		TaskControlBlock* temp = getCurrentTask();
+		TaskControlBlock* currentTask = getCurrentTask();
+	for (i = 0; i < NUM_TASKS; i++) {
+		if (temp->tid == tid) {
+				return temp;
+		} else {
+			temp = temp->next;
+		}
+	}
+	//if we get here then we couldn't find the task
+	return 0;
+}
+
+void setUFTask(TaskControlBlock *newUFTask) {
+		UF_TASK = newUFTask;
+}
+
 TaskControlBlock* getNullTask(void) {
 	int i;
 	TaskControlBlock* task = getCurrentTask();
@@ -86,7 +109,6 @@ int StartScheduler(void)
 
 void ResumeShellTask() {
 	
-
 	TaskControlBlock* nullTask = getNullTask();
 	TaskControlBlock* nextTask = nullTask->next;
 	TaskControlBlock* shell = getShellTask();
@@ -110,7 +132,35 @@ void SuspendShellTask() {
 }
 
 void handleETX() {
-	printf("Leaving");
+	printf("\n383# ");
+	DeleteUFTask();
+	ResumeShellTask();
+}
+
+void DeleteUFTask(void) {
+	//first, get a reference to the task before and the task after the UF in the tasks array
+	TaskControlBlock* previous = getPreviousTask(getUFTask());
+	TaskControlBlock* next = getUFTask()->next;
+	//skip the UF task
+	previous->next = next;
+	//TASK_LIST_PTR = getUFTask();
+	//NEXT_TID--;
+}
+
+bool DeleteTask(int tid) {
+		if(tid != 0 && tid != 1) { //refuse to delete null or shell
+				TaskControlBlock* desiredTask = getTask(tid);
+				if (desiredTask != 0) { //if we actually got the task
+					TaskControlBlock* previous = getPreviousTask(desiredTask);
+					TaskControlBlock* next = desiredTask->next;
+					previous->next = next;
+					return true;
+				} else {
+					return false;
+				}
+		} else {
+				return false;
+		}
 }
 
 int CreateShellTask(void (*func)(void), 
@@ -119,7 +169,21 @@ int CreateShellTask(void (*func)(void),
 		{
 				int tid = CreateTaskImpl((*func), 
                     stack_start,
-                    stack_size, true);							
+                    stack_size, true, false);							
+				return tid;							
+		}
+		
+int CreateUFTask(void (*func)(void), 
+                    unsigned char *stack_start,
+                    unsigned stack_size)
+		{
+			//create the task stack in here
+			
+				int tid = CreateTaskImpl((*func), 
+                    stack_start,
+                    stack_size, false, true);
+				//creating a user-facing task automatically suspends the shell
+				SuspendShellTask();
 				return tid;							
 		}
 	
@@ -130,13 +194,13 @@ int CreateTask(void (*func)(void),
                     unsigned stack_size)
 					//,unsigned ticks)
 	{
-		int tid = CreateTaskImpl((*func), stack_start, stack_size, false);
+		int tid = CreateTaskImpl((*func), stack_start, stack_size, false, false);
 		return tid;
 	}
 	
 int CreateTaskImpl(void (*func)(void), 
                     unsigned char *stack_start,
-                    unsigned stack_size, bool isShell)
+                    unsigned stack_size, bool isShell, bool isUF)
 										{
 											//	long ints;
 	TaskControlBlock *p, *next;
@@ -169,6 +233,9 @@ int CreateTaskImpl(void (*func)(void),
 		//we are assuming there is only one shell at a time
 		//if this is called and there is already a shell, 
 		SHELL_TASK = p;
+	}
+	if (isUF) {
+		UF_TASK = p;
 	}
 //  EndCritical(ints);
 	return p->tid;			
